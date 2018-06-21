@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Isen.Billaud.Library
 {
     public class Node : INode,IEquatable<Node>
     {
-        private List<INode> _children;
+        private readonly List<INode> _children;
 
 
         public Node(string value, Node parent = null)
         {
             Id = Guid.NewGuid();
-            Value = value;
-            Parent = parent;
             _children= new List<INode>(5);
-            Depth = parent?.Depth + 1 ?? 0;
-            parent?.AddChild(this);
+            Value = value;
+            parent?.AddChildNode(this);
         }
 
 
@@ -24,22 +23,51 @@ namespace Isen.Billaud.Library
             return _children[index];
         }
 
-        public INode AddChild(INode child)
+        public void AddChildNode(INode child)
         {
             _children.Add(child);
-            return this;
+            child.Parent = this;
         }
 
-        public int Depth { get; }
+        public void AddNodes(IEnumerable<INode> nodeList)
+        {
+            foreach (var node in nodeList.ToList())
+            {
+                AddChildNode(node);
+            }
+        }
 
+        public void RemoveChildNode(Guid id)
+        {
+            _children.ToList().ForEach((node =>
+            {
+                if (node.Id != id) return;
+                node.Parent = null;
+                _children.Remove(node);
+            }));
+        }
 
         public string Value { get; set; }
 
+        public void RemoveChildNode(INode node)
+        {
+            _children.ToList().ForEach((enfant) =>
+            {
+                //List.remove fait déjà appel à Equals, vu que IEquatable est implementé
+                //Mais le sujet demande d'utilisé Equals();
+                if (Equals(node, enfant))
+                {
+                    _children.Remove(enfant);
+                    enfant.Parent = null;
+                }
+            });
+        }
+        public int Depth => Parent?.Depth + 1 ?? 0;
         public Guid Id { get; }
 
         public INode Parent { get; set; }
 
-
+        #region equals
         public bool Equals(Node other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -51,7 +79,7 @@ namespace Isen.Billaud.Library
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == this.GetType() && Equals((Node) obj);
+            return obj.GetType() == GetType() && Equals((Node) obj);
         }
 
         public override int GetHashCode()
@@ -61,6 +89,10 @@ namespace Isen.Billaud.Library
                 return ((Value != null ? Value.GetHashCode() : 0) * 397) ^ Id.GetHashCode();
             }
         }
+        
+
+        #endregion
+
         
         public override string ToString()
         {

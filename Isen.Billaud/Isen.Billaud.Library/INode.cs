@@ -14,11 +14,19 @@ namespace Isen.Billaud.Library
 
         INode ChildAt(int index);
 
-        INode AddChild(INode child);
-        
-        
         int Depth { get; }
         
-        
+        void AddChildNode(INode child);
+
+        void AddNodes(IEnumerable<INode> nodeList);
+
+        void RemoveChildNode(Guid id);
+
+        void RemoveChildNode(INode node);
+
+
+
+
+
     }
 }
