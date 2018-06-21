@@ -7,11 +7,15 @@ namespace Isen.Billaud.ConsoleApp
     {
         private static void Main(string[] args)
         {
-            var a = new Node("Bonjour");
-            var b = new Node("fils de bonjour", a);
-            var c = new Node("Au revois");
-            var d = new Node("Merci");
-            var e= new Node("de Rien");
+            var a = new Node<string>("Bonjour");
+
+            var b = new Node<string>("fils de bonjour", a);
+
+            var c = new Node<string>("Au revois");
+
+            var d = new Node<string>("Merci");
+
+            var e = new Node<string>("de Rien");
 
             c.AddChildNode(a);
 
@@ -30,11 +34,10 @@ namespace Isen.Billaud.ConsoleApp
             #region Question5
 
             a.AddChildNode(d);
- 
-            c.AddChildNode(e);
- 
-            Console.WriteLine(c.ToString());
 
+            c.AddChildNode(e);
+
+            Console.WriteLine(c.ToString());
 
             #endregion
         }

@@ -3,37 +3,37 @@ using System.Collections.Generic;
 
 namespace Isen.Billaud.Library
 {
-    public interface INode
+    public interface INode<T> : IEquatable<INode<T>>
 
     {
-        string Value { get; set; }
+        T Value { get; set; }
 
         Guid Id { get; }
 
-        INode Parent { get; set; }
+        INode<T> Parent { get; set; }
 
         int Depth { get; }
 
-        INode ChildAt(int index);
+        INode<T> ChildAt(int index);
 
         #region Question3
 
-        void AddChildNode(INode child);
+        void AddChildNode(INode<T> child);
 
-        void AddNodes(IEnumerable<INode> nodeList);
+        void AddNodes(IEnumerable<INode<T>> nodeList);
 
         void RemoveChildNode(Guid id);
 
-        void RemoveChildNode(INode node);
+        void RemoveChildNode(INode<T> node);
 
         #endregion
 
 
         #region Question4
 
-        INode FindTraversing(Guid id);
+        INode<T> FindTraversing(Guid id);
 
-        INode FindTraversing(INode node);
+        INode<T> FindTraversing(INode<T> node);
 
         #endregion
     }

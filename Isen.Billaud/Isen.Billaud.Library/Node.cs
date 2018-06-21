@@ -4,38 +4,40 @@ using System.Linq;
 
 namespace Isen.Billaud.Library
 {
-    public class Node : INode, IEquatable<Node>
+    public class Node<T> : INode<T>
     {
-        private readonly List<INode> _children;
+        private readonly List<INode<T>> _children;
 
 
-        public Node(string value, Node parent = null)
+        public Node(T value, Node<T> parent = null)
         {
             Id = Guid.NewGuid();
-            _children = new List<INode>(5);
+            _children = new List<INode<T>>(5);
             Value = value;
             parent?.AddChildNode(this);
         }
 
         public int Depth => Parent?.Depth + 1 ?? 0;
         public Guid Id { get; }
+        
+        public T Value { get; set; }
 
-        public INode Parent { get; set; }
+        public INode<T> Parent { get; set; }
 
-        public INode ChildAt(int index)
+        public INode<T> ChildAt(int index)
         {
             return _children[index];
         }
 
         #region Question3
 
-        public void AddChildNode(INode child)
+        public void AddChildNode(INode<T> child)
         {
             _children.Add(child);
             child.Parent = this;
         }
 
-        public void AddNodes(IEnumerable<INode> nodeList)
+        public void AddNodes(IEnumerable<INode<T>> nodeList)
         {
             foreach (var node in nodeList.ToList()) AddChildNode(node);
         }
@@ -50,17 +52,13 @@ namespace Isen.Billaud.Library
             });
         }
 
-        public string Value { get; set; }
-
-        public void RemoveChildNode(INode node)
+        public void RemoveChildNode(INode<T> node)
         {
             _children.ToList().ForEach(enfant =>
             {
-                if (Equals(node, enfant))
-                {
-                    _children.Remove(enfant);
-                    enfant.Parent = null;
-                }
+                if (!Equals(node, enfant)) return;
+                _children.Remove(enfant);
+                enfant.Parent = null;
             });
         }
 
@@ -68,7 +66,7 @@ namespace Isen.Billaud.Library
 
         #region Question4
 
-        public INode FindTraversing(Guid id)
+        public INode<T> FindTraversing(Guid id)
 
         {
             if (Id == id) return this;
@@ -86,7 +84,7 @@ namespace Isen.Billaud.Library
         }
 
 
-        public INode FindTraversing(INode node)
+        public INode<T> FindTraversing(INode<T> node)
 
         {
             if (Equals(node)) return this;
@@ -133,18 +131,18 @@ namespace Isen.Billaud.Library
 
         #region equals
 
-        public bool Equals(Node other)
+        public bool Equals(INode<T> other)
         {
             if (ReferenceEquals(null, other)) return false;
             if (ReferenceEquals(this, other)) return true;
-            return string.Equals(Value, other.Value) && Id.Equals(other.Id);
+            return Equals(Value, other.Value) && Id.Equals(other.Id);
         }
 
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
             if (ReferenceEquals(this, obj)) return true;
-            return obj.GetType() == GetType() && Equals((Node) obj);
+            return obj.GetType() == GetType() && Equals((Node<T>) obj);
         }
 
         public override int GetHashCode()
