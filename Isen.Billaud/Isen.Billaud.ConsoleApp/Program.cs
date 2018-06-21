@@ -1,5 +1,6 @@
 ﻿using System;
 using Isen.Billaud.Library;
+using Newtonsoft.Json.Linq;
 
 namespace Isen.Billaud.ConsoleApp
 {
@@ -43,9 +44,26 @@ namespace Isen.Billaud.ConsoleApp
 
             #region Question7
 
-            Console.WriteLine(c.serializeJSon().ToString());  
+            Console.WriteLine(c.SerializeJSon().ToString());  
+            
+            JObject jobj = c.SerializeJSon();
+ 
+            Console.WriteLine(jobj.ToString());
+ 
+            var f = new Node<string>();
+ 
+            f.UnserializeJson(jobj);
+ 
+            Console.WriteLine($"unserialization : {System.Environment.NewLine}{f}");
+ 
+            Console.WriteLine($"Original: {System.Environment.NewLine}{c}");
+
 
             #endregion
+            
+            a.RemoveChildNode(b);
+ 
+            Console.WriteLine($"Remove: {System.Environment.NewLine}{c}");      
         }
     }
 }

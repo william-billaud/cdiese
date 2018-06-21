@@ -10,7 +10,7 @@ namespace Isen.Billaud.Library
         private readonly List<INode<T>> _children;
 
 
-        public Node(T value, Node<T> parent = null)
+        public Node(T value = default(T), Node<T> parent = null)
         {
             Id = Guid.NewGuid();
             _children = new List<INode<T>>(5);
@@ -130,9 +130,9 @@ namespace Isen.Billaud.Library
 
         #endregion
 
-        #region Question6
+        #region Question7
 
-        public JObject serializeJSon()
+        public JObject SerializeJSon()
 
         {
             var jobj = new JObject();
@@ -140,12 +140,28 @@ namespace Isen.Billaud.Library
             jobj.Add(new JProperty("value", Value));
 
             var jarr = new JArray();
-            _children.ForEach((node) => { jarr.Add(node.serializeJSon()); });
+            _children.ForEach((node) => { jarr.Add(node.SerializeJSon()); });
 
-            jobj.Add(new JProperty("enfant", jarr));
+            jobj.Add(new JProperty("enfants", jarr));
 
 
             return jobj;
+        }
+
+
+        public void UnserializeJson(JToken jobj)
+
+        {
+            Value = jobj["value"].ToObject<T>();
+
+            var childs = jobj["enfants"]?.Children().ToList();
+            foreach (var jTok in childs)
+            {
+                var nodeEnfant = new Node<T>();
+
+                nodeEnfant.UnserializeJson(jTok);
+                AddChildNode(nodeEnfant);
+            }
         }
 
         #endregion

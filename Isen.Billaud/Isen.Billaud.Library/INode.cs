@@ -40,9 +40,10 @@ namespace Isen.Billaud.Library
 
         #region Question6
         
-        JObject serializeJSon();
+        JObject SerializeJSon();
 
-        
+        void UnserializeJson(JToken jobj);
+
 
         #endregion
     }
