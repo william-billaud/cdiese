@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Newtonsoft.Json.Linq;
 
 namespace Isen.Billaud.Library
 {
@@ -19,7 +20,7 @@ namespace Isen.Billaud.Library
 
         public int Depth => Parent?.Depth + 1 ?? 0;
         public Guid Id { get; }
-        
+
         public T Value { get; set; }
 
         public INode<T> Parent { get; set; }
@@ -125,6 +126,26 @@ namespace Isen.Billaud.Library
 
 
             return retour;
+        }
+
+        #endregion
+
+        #region Question6
+
+        public JObject serializeJSon()
+
+        {
+            var jobj = new JObject();
+
+            jobj.Add(new JProperty("value", Value));
+
+            var jarr = new JArray();
+            _children.ForEach((node) => { jarr.Add(node.serializeJSon()); });
+
+            jobj.Add(new JProperty("enfant", jarr));
+
+
+            return jobj;
         }
 
         #endregion

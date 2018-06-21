@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 
 namespace Isen.Billaud.Library
 {
@@ -36,5 +37,14 @@ namespace Isen.Billaud.Library
         INode<T> FindTraversing(INode<T> node);
 
         #endregion
+
+        #region Question6
+        
+        JObject serializeJSon();
+
+        
+
+        #endregion
     }
+    
 }

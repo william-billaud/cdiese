@@ -40,6 +40,12 @@ namespace Isen.Billaud.ConsoleApp
             Console.WriteLine(c.ToString());
 
             #endregion
+
+            #region Question7
+
+            Console.WriteLine(c.serializeJSon().ToString());  
+
+            #endregion
         }
     }
 }
