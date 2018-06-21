@@ -9,9 +9,12 @@ namespace Isen.Billaud.ConsoleApp
         {
             var a = new Node("Bonjour");
             var b = new Node("fils de bonjour", a);
+            var c= new Node("Au revois");
             
+            c.AddChildNode(a);
             Console.WriteLine($"element {nameof(a)} : {a}");
             Console.WriteLine($"element {nameof(b)} : {b}");
+            Console.WriteLine($"element {nameof(c)} : {c}");
         }
     }
 }
