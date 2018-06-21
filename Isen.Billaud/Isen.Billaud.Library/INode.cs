@@ -6,16 +6,18 @@ namespace Isen.Billaud.Library
     public interface INode
 
     {
-        String Value { get; set; }
-        
+        string Value { get; set; }
+
         Guid Id { get; }
-        
+
         INode Parent { get; set; }
+
+        int Depth { get; }
 
         INode ChildAt(int index);
 
-        int Depth { get; }
-        
+        #region Question3
+
         void AddChildNode(INode child);
 
         void AddNodes(IEnumerable<INode> nodeList);
@@ -24,9 +26,15 @@ namespace Isen.Billaud.Library
 
         void RemoveChildNode(INode node);
 
+        #endregion
 
 
+        #region Question4
 
+        INode FindTraversing(Guid id);
 
+        INode FindTraversing(INode node);
+
+        #endregion
     }
 }

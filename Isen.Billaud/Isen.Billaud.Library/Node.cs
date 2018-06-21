@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Isen.Billaud.Library
 {
-    public class Node : INode,IEquatable<Node>
+    public class Node : INode, IEquatable<Node>
     {
         private readonly List<INode> _children;
 
@@ -12,16 +12,28 @@ namespace Isen.Billaud.Library
         public Node(string value, Node parent = null)
         {
             Id = Guid.NewGuid();
-            _children= new List<INode>(5);
+            _children = new List<INode>(5);
             Value = value;
             parent?.AddChildNode(this);
         }
 
+        public int Depth => Parent?.Depth + 1 ?? 0;
+        public Guid Id { get; }
+
+        public INode Parent { get; set; }
 
         public INode ChildAt(int index)
         {
             return _children[index];
         }
+
+
+        public override string ToString()
+        {
+            return $"id : {Id}, Value : {Value} , profondeur : {Depth}, nombre d'enfant : {_children.Count} ";
+        }
+
+        #region Question3
 
         public void AddChildNode(INode child)
         {
@@ -31,30 +43,25 @@ namespace Isen.Billaud.Library
 
         public void AddNodes(IEnumerable<INode> nodeList)
         {
-            foreach (var node in nodeList.ToList())
-            {
-                AddChildNode(node);
-            }
+            foreach (var node in nodeList.ToList()) AddChildNode(node);
         }
 
         public void RemoveChildNode(Guid id)
         {
-            _children.ToList().ForEach((node =>
+            _children.ToList().ForEach(node =>
             {
                 if (node.Id != id) return;
                 node.Parent = null;
                 _children.Remove(node);
-            }));
+            });
         }
 
         public string Value { get; set; }
 
         public void RemoveChildNode(INode node)
         {
-            _children.ToList().ForEach((enfant) =>
+            _children.ToList().ForEach(enfant =>
             {
-                //List.remove fait déjà appel à Equals, vu que IEquatable est implementé
-                //Mais le sujet demande d'utilisé Equals();
                 if (Equals(node, enfant))
                 {
                     _children.Remove(enfant);
@@ -62,12 +69,50 @@ namespace Isen.Billaud.Library
                 }
             });
         }
-        public int Depth => Parent?.Depth + 1 ?? 0;
-        public Guid Id { get; }
 
-        public INode Parent { get; set; }
+        #endregion
+
+        #region Question4
+
+        public INode FindTraversing(Guid id)
+
+        {
+            if (Id == id) return this;
+
+            foreach (var enfant in _children)
+
+            {
+                var res = enfant.FindTraversing(id);
+
+                if (res != null) return res;
+            }
+
+
+            return null;
+        }
+
+
+        public INode FindTraversing(INode node)
+
+        {
+            if (Equals(node)) return this;
+
+            foreach (var enfant in _children)
+
+            {
+                var res = enfant.FindTraversing(node);
+
+                if (res != null) return res;
+            }
+
+
+            return null;
+        }
+
+        #endregion
 
         #region equals
+
         public bool Equals(Node other)
         {
             if (ReferenceEquals(null, other)) return false;
@@ -89,15 +134,7 @@ namespace Isen.Billaud.Library
                 return ((Value != null ? Value.GetHashCode() : 0) * 397) ^ Id.GetHashCode();
             }
         }
-        
 
         #endregion
-
-        
-        public override string ToString()
-        {
-            return $"id : {Id}, Value : {Value} , profondeur : {Depth}, nombre d'enfant : {_children.Count} ";
-        }
-        
     }
 }
