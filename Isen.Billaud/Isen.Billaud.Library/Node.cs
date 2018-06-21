@@ -27,12 +27,6 @@ namespace Isen.Billaud.Library
             return _children[index];
         }
 
-
-        public override string ToString()
-        {
-            return $"id : {Id}, Value : {Value} , profondeur : {Depth}, nombre d'enfant : {_children.Count} ";
-        }
-
         #region Question3
 
         public void AddChildNode(INode child)
@@ -107,6 +101,32 @@ namespace Isen.Billaud.Library
 
 
             return null;
+        }
+
+        #endregion
+
+        #region Question5
+
+        public override string ToString()
+        {
+            String retour = "";
+
+            for (var i = 0; i < this.Depth; i++)
+
+            {
+                retour += "|-";
+            }
+
+            retour += $"{Value}  {Id}";
+
+            foreach (var child in _children)
+
+            {
+                retour += Environment.NewLine + child.ToString();
+            }
+
+
+            return retour;
         }
 
         #endregion

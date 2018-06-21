@@ -11,9 +11,11 @@ namespace Isen.Billaud.ConsoleApp
             var b = new Node("fils de bonjour", a);
             var c = new Node("Au revois");
             var d = new Node("Merci");
+            var e= new Node("de Rien");
 
             c.AddChildNode(a);
 
+            #region Question4
 
             Console.WriteLine($"traversing c=>b Guid {c.FindTraversing(b.Id)}");
 
@@ -22,6 +24,19 @@ namespace Isen.Billaud.ConsoleApp
             Console.WriteLine($"traversing c=>b Node {c.FindTraversing(b)}");
 
             Console.WriteLine($"traversing c=>d Node {c.FindTraversing(d)}");
+
+            #endregion
+
+            #region Question5
+
+            a.AddChildNode(d);
+ 
+            c.AddChildNode(e);
+ 
+            Console.WriteLine(c.ToString());
+
+
+            #endregion
         }
     }
 }
